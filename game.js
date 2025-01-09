@@ -17,14 +17,23 @@ function handleCellClick(index) {
     if (board[index] !== '' || !gameActive) return; // Ignore if cell is already filled or game is over
     board[index] = currentPlayer; // Mark the cell
     cells[index].textContent = currentPlayer; // Update UI
+
+    // Change color based on the current player
+    if (currentPlayer === 'X') {
+        cells[index].style.color = '#FF5733'; // Color for X (e.g., red)
+    } else {
+        cells[index].style.color = '#33C1FF'; // Color for O (e.g., blue)
+    }
+
     checkWin(); // Check for a win
 
-    if (isComputerMode && gameActive) {
-        currentPlayer = 'O'; // Set computer's symbol
-        setTimeout(computerMove, 500); // Delay for computer's move
-    } else {
+    // Switch player only if not in computer mode
+    if (!isComputerMode) {
         currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Switch player
         gameInfo.textContent = `Player ${currentPlayer}'s Turn`;
+    } else if (gameActive) {
+        currentPlayer = 'O'; // Set computer's symbol
+        setTimeout(computerMove, 500); // Delay for computer's move
     }
 }
 
@@ -49,21 +58,15 @@ function checkWin() {
     for (let condition of winningConditions) {
         const [a, b, c] = condition;
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-            gameInfo.textContent = `${currentPlayer} Wins!`;
+            alert(`${currentPlayer} Wins!`); // Alert the winner
             gameActive = false; // End the game
             return;
         }
     }
 
     if (!board.includes('')) {
-        gameInfo.textContent = 'It\'s a Draw!';
+        alert('It\'s a Draw!'); // Alert for a draw
         gameActive = false; // End the game
-    } else {
-        // Switch player only if not in computer mode
-        if (!isComputerMode) {
-            currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Switch player
-            gameInfo.textContent = `Player ${currentPlayer}'s Turn`;
-        }
     }
 }
 
