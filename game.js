@@ -4,6 +4,13 @@ const resetButton = document.getElementById('reset-button');
 let currentPlayer = 'X'; // Player X starts
 let gameActive = true; // Game is active
 let board = ['', '', '', '', '', '', '', '', '']; // Game board
+let isComputerMode = false; // Flag to check if playing against computer
+
+// Check URL parameters to set game mode
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('mode') === 'computer') {
+    isComputerMode = true; // Set to true if playing against computer
+}
 
 // Function to handle cell click
 function handleCellClick(index) {
@@ -11,6 +18,21 @@ function handleCellClick(index) {
     board[index] = currentPlayer; // Mark the cell
     cells[index].textContent = currentPlayer; // Update UI
     checkWin(); // Check for a win
+
+    if (isComputerMode && gameActive) {
+        currentPlayer = 'O'; // Set computer's symbol
+        setTimeout(computerMove, 500); // Delay for computer's move
+    }
+}
+
+// Function for computer's move
+function computerMove() {
+    const availableCells = Array.from(cells).filter(cell => !cell.textContent);
+    if (availableCells.length > 0) {
+        const randomCell = availableCells[Math.floor(Math.random() * availableCells.length)];
+        const index = Array.from(cells).indexOf(randomCell);
+        handleCellClick(index); // Call handleCellClick for the computer's move
+    }
 }
 
 // Function to check for a win or draw
