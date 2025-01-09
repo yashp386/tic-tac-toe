@@ -22,6 +22,9 @@ function handleCellClick(index) {
     if (isComputerMode && gameActive) {
         currentPlayer = 'O'; // Set computer's symbol
         setTimeout(computerMove, 500); // Delay for computer's move
+    } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Switch player
+        gameInfo.textContent = `Player ${currentPlayer}'s Turn`;
     }
 }
 
@@ -56,8 +59,11 @@ function checkWin() {
         gameInfo.textContent = 'It\'s a Draw!';
         gameActive = false; // End the game
     } else {
-        currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Switch player
-        gameInfo.textContent = `Player ${currentPlayer}'s Turn`;
+        // Switch player only if not in computer mode
+        if (!isComputerMode) {
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Switch player
+            gameInfo.textContent = `Player ${currentPlayer}'s Turn`;
+        }
     }
 }
 
