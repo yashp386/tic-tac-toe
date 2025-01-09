@@ -28,17 +28,21 @@ function handleCellClick(index) {
     checkWin(); // Check for a win
 
     // Switch player only if not in computer mode
-    if (!isComputerMode) {
-        currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Switch player
-        gameInfo.textContent = `Player ${currentPlayer}'s Turn`;
-    } else if (gameActive) {
-        currentPlayer = 'O'; // Set computer's symbol
-        setTimeout(computerMove, 500); // Delay for computer's move
+    if (gameActive) {
+        if (!isComputerMode) {
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Switch player
+            gameInfo.textContent = `Player ${currentPlayer}'s Turn`;
+        } else {
+            // If in computer mode, switch to computer's turn
+            currentPlayer = 'O'; // Set computer's symbol
+            setTimeout(computerMove, 500); // Delay for computer's move
+        }
     }
 }
 
 // Function for computer's move
 function computerMove() {
+    if (!gameActive) return; // Ensure the game is still active
     const availableCells = Array.from(cells).filter(cell => !cell.textContent);
     if (availableCells.length > 0) {
         const randomCell = availableCells[Math.floor(Math.random() * availableCells.length)];
