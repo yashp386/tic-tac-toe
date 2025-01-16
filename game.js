@@ -21,8 +21,10 @@ function handleCellClick(index) {
     checkWin(); // Check for a win
 
     // Switch player
-    currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Switch player
-    gameInfo.textContent = `Player ${currentPlayer}'s Turn`;
+    if (gameActive) {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Switch player
+        gameInfo.textContent = `Player ${currentPlayer}'s Turn`;
+    }
 }
 
 // Function to check for a win or draw
@@ -36,7 +38,7 @@ function checkWin() {
     for (let condition of winningConditions) {
         const [a, b, c] = condition;
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-            gameInfo.textContent = `${currentPlayer} Wins!`; // Display winner message
+            gameInfo.textContent = `Player ${board[a]} Wins!`; // Display winner message
             gameActive = false; // End the game
             return;
         }
