@@ -36,14 +36,14 @@ function checkWin() {
     for (let condition of winningConditions) {
         const [a, b, c] = condition;
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-            alert(`${currentPlayer} Wins!`); // Alert the winner
+            gameInfo.textContent = `${currentPlayer} Wins!`; // Display winner message
             gameActive = false; // End the game
             return;
         }
     }
 
     if (!board.includes('')) {
-        alert('It\'s a Draw!'); // Alert for a draw
+        gameInfo.textContent = 'It\'s a Draw!'; // Display draw message
         gameActive = false; // End the game
     }
 }
