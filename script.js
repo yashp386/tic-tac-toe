@@ -28,11 +28,14 @@ document.querySelectorAll('.character').forEach(char => {
     });
 });
 
-// Jump function with custom physics
+// Jump function with custom physics and animations
 function jump() {
     if (!isJumping && !isGameOver) {
         isJumping = true;
         if (soundEnabled) jumpSound.play();
+        
+        // Add jumping animation class
+        character.classList.add('jumping');
         
         let jumpInterval = setInterval(() => {
             // Get current bottom position
@@ -45,14 +48,24 @@ function jump() {
             }
             // Coming down
             else if (characterBottom > 0) {
+                // Remove jumping class and add falling class
+                character.classList.remove('jumping');
                 character.style.bottom = (characterBottom - gravity) + 'px';
             }
             // Landing
             else {
                 clearInterval(jumpInterval);
-                isJumping = false;
-                jumpHeight = 0;
                 character.style.bottom = '0px';
+                
+                // Add landing animation
+                character.classList.add('falling');
+                
+                // Remove animation classes after landing
+                setTimeout(() => {
+                    character.classList.remove('jumping', 'falling');
+                    isJumping = false;
+                    jumpHeight = 0;
+                }, 200);
             }
         }, 20);
     }
