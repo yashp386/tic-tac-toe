@@ -10,6 +10,9 @@ let isJumping = false;
 let isGameOver = false;
 let scoreValue = 0;
 let soundEnabled = true;
+let jumpHeight = 0;
+let jumpSpeed = 5; // Adjust this value to change jump speed
+let gravity = 2; // Adjust this value to change falling speed
 
 // Sound effects
 const jumpSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
@@ -25,18 +28,33 @@ document.querySelectorAll('.character').forEach(char => {
     });
 });
 
-// Jump function
+// Jump function with custom physics
 function jump() {
     if (!isJumping && !isGameOver) {
         isJumping = true;
         if (soundEnabled) jumpSound.play();
         
-        character.classList.add('jump');
-        
-        setTimeout(() => {
-            character.classList.remove('jump');
-            isJumping = false;
-        }, 500);
+        let jumpInterval = setInterval(() => {
+            // Get current bottom position
+            let characterBottom = parseInt(window.getComputedStyle(character).getPropertyValue('bottom'));
+            
+            // Going up
+            if (jumpHeight < 100) { // Maximum jump height
+                character.style.bottom = (characterBottom + jumpSpeed) + 'px';
+                jumpHeight += jumpSpeed;
+            }
+            // Coming down
+            else if (characterBottom > 0) {
+                character.style.bottom = (characterBottom - gravity) + 'px';
+            }
+            // Landing
+            else {
+                clearInterval(jumpInterval);
+                isJumping = false;
+                jumpHeight = 0;
+                character.style.bottom = '0px';
+            }
+        }, 20);
     }
 }
 
