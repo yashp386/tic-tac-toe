@@ -11,8 +11,9 @@ let isGameOver = false;
 let scoreValue = 0;
 let soundEnabled = true;
 let jumpHeight = 0;
-let jumpSpeed = 5; // Adjust this value to change jump speed
-let gravity = 5; // Adjust this value to change falling speed
+let jumpSpeed = 8; // Increased jump speed
+let gravity = 3; // Adjusted gravity for higher jump
+let maxJumpHeight = 200; // Increased maximum jump height
 
 // Sound effects
 const jumpSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
@@ -42,7 +43,7 @@ function jump() {
             let characterBottom = parseInt(window.getComputedStyle(character).getPropertyValue('bottom'));
             
             // Going up
-            if (jumpHeight < 100) { // Maximum jump height
+            if (jumpHeight < maxJumpHeight) { // Using new maxJumpHeight
                 character.style.bottom = (characterBottom + jumpSpeed) + 'px';
                 jumpHeight += jumpSpeed;
             }
