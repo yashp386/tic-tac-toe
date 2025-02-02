@@ -12,7 +12,7 @@ let scoreValue = 0;
 let soundEnabled = true;
 let jumpHeight = 0;
 let jumpSpeed = 5; // Adjust this value to change jump speed
-let gravity = 2; // Adjust this value to change falling speed
+let gravity = 4; // Adjust this value to change falling speed
 
 // Sound effects
 const jumpSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
