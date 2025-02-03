@@ -1,1 +1,1 @@
-create me a dino website where we can change the dino character add some sounds.
+tic tac toe website with option for playing against computer or vs player
