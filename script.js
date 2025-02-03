@@ -41,6 +41,7 @@ function handleCellClick(clickedCell, clickedCellIndex) {
     if (checkWin()) {
         status.textContent = `Player ${currentPlayer} Wins!`;
         gameActive = false;
+        celebrateWin();
         return;
     }
 
@@ -93,6 +94,52 @@ function resetGame() {
         cell.textContent = '';
         cell.classList.remove('x', 'o');
     });
+}
+
+// Add celebration function
+function celebrateWin() {
+    // First burst of confetti
+    confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+    });
+
+    // Multiple bursts of confetti
+    let end = Date.now() + (2 * 1000); // 2 seconds of celebration
+
+    let colors = ['#ff0000', '#00ff00', '#0000ff'];
+
+    (function frame() {
+        confetti({
+            particleCount: 3,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: colors
+        });
+        
+        confetti({
+            particleCount: 3,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: colors
+        });
+
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    }());
+
+    // Final burst after a delay
+    setTimeout(() => {
+        confetti({
+            particleCount: 150,
+            spread: 100,
+            origin: { y: 0.6 }
+        });
+    }, 500);
 }
 
 // Event Listeners
