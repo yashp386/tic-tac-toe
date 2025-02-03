@@ -16,6 +16,13 @@
             <button id="pvc-btn" class="mode-btn">Player vs Computer</button>
         </div>
 
+        <!-- Difficulty Selection (initially hidden) -->
+        <div id="difficulty-selection" class="difficulty-selection" style="display: none;">
+            <button id="easy-btn" class="difficulty-btn active">Easy</button>
+            <button id="medium-btn" class="difficulty-btn">Medium</button>
+            <button id="hard-btn" class="difficulty-btn">Hard</button>
+        </div>
+
         <!-- Game Board -->
         <div class="game-board">
             <div class="cell" data-index="0"></div>
@@ -35,7 +42,7 @@
         <!-- Reset Button -->
         <button id="reset-btn">Reset Game</button>
     </div>
-    <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html> 
