@@ -1,5 +1,7 @@
 var email = document.querySelector('#email'), password = document.querySelector('#password'), mySVG = document.querySelector('.svgContainer'), armL = document.querySelector('.armL'), armR = document.querySelector('.armR'), eyeL = document.querySelector('.eyeL'), eyeR = document.querySelector('.eyeR'), nose = document.querySelector('.nose'), mouth = document.querySelector('.mouth'), mouthBG = document.querySelector('.mouthBG'), mouthSmallBG = document.querySelector('.mouthSmallBG'), mouthMediumBG = document.querySelector('.mouthMediumBG'), mouthLargeBG = document.querySelector('.mouthLargeBG'), mouthMaskPath = document.querySelector('#mouthMaskPath'), mouthOutline = document.querySelector('.mouthOutline'), tooth = document.querySelector('.tooth'), tongue = document.querySelector('.tongue'), chin = document.querySelector('.chin'), face = document.querySelector('.face'), eyebrow = document.querySelector('.eyebrow'), outerEarL = document.querySelector('.earL .outerEar'), outerEarR = document.querySelector('.earR .outerEar'), earHairL = document.querySelector('.earL .earHair'), earHairR = document.querySelector('.earR .earHair'), hair = document.querySelector('.hair');
 var caretPos, curEmailIndex, screenCenter, svgCoords, eyeMaxHorizD = 20, eyeMaxVertD = 10, noseMaxHorizD = 23, noseMaxVertD = 10, dFromC, eyeDistH, eyeLDistV, eyeRDistV, eyeDistR, mouthStatus = "small";
+const passwordToggle = document.getElementById('password-toggle');
+let isPasswordVisible = false;
 
 function getCoord(e) {
 	var carPos = email.selectionEnd,
@@ -143,15 +145,23 @@ function onPasswordBlur(e) {
 }
 
 function coverEyes() {
-	TweenMax.to(armL, .45, { x: -93, y: 2, rotation: 0, ease: Quad.easeOut });
-	TweenMax.to(armR, .45, { x: -93, y: 2, rotation: 0, ease: Quad.easeOut, delay: .1 });
+	if (!isPasswordVisible) {
+		TweenMax.to(armL, .45, { x: -93, y: 2, rotation: 0, ease: Quad.easeOut });
+		TweenMax.to(armR, .45, { x: -93, y: 2, rotation: 0, ease: Quad.easeOut, delay: .1 });
+		
+		// Slightly close eyes
+		TweenMax.to([eyeL, eyeR], .1, { scaleX: .85, scaleY: .85, ease: Quad.easeOut });
+	}
 }
 
 function uncoverEyes() {
-	TweenMax.to(armL, 1.35, { y: 220, ease: Quad.easeOut });
-	TweenMax.to(armL, 1.35, { rotation: 105, ease: Quad.easeOut, delay: .1 });
-	TweenMax.to(armR, 1.35, { y: 220, ease: Quad.easeOut });
-	TweenMax.to(armR, 1.35, { rotation: -105, ease: Quad.easeOut, delay: .1 });
+	if (!isPasswordVisible) {
+		TweenMax.to(armL, .45, { x: -93, y: 220, rotation: 105, ease: Quad.easeOut });
+		TweenMax.to(armR, .45, { x: -93, y: 220, rotation: -105, ease: Quad.easeOut });
+		
+		// Reset eyes to normal
+		TweenMax.to([eyeL, eyeR], .1, { scaleX: 1, scaleY: 1, ease: Quad.easeOut });
+	}
 }
 
 function resetFace() {
@@ -194,10 +204,48 @@ function getPosition(el) {
 	};
 }
 
+function togglePassword() {
+	isPasswordVisible = !isPasswordVisible;
+	password.type = isPasswordVisible ? 'text' : 'password';
+	
+	if (isPasswordVisible) {
+		// Move arms down animation
+		TweenMax.to(armL, .45, { x: -93, y: 220, rotation: 105, ease: Quad.easeOut });
+		TweenMax.to(armR, .45, { x: -93, y: 220, rotation: -105, ease: Quad.easeOut });
+		
+		// Open eyes and reset face
+		TweenMax.to([eyeL, eyeR], .1, { scaleX: 1, scaleY: 1, ease: Quad.easeOut });
+		TweenMax.to([eyeL, eyeR], .1, { x: 0, y: 0, ease: Quad.easeOut });
+		TweenMax.to(nose, .1, { y: 0, ease: Quad.easeOut });
+		TweenMax.to(mouth, .1, { y: 0, ease: Quad.easeOut });
+		TweenMax.to(chin, .1, { y: 0, ease: Quad.easeOut });
+		TweenMax.to([face, eyebrow], .1, { y: 0, ease: Quad.easeOut });
+	} else {
+		// Cover eyes animation first, then move arms up
+		TweenMax.to(armL, .45, { x: -93, y: 2, rotation: 0, ease: Quad.easeOut });
+		TweenMax.to(armR, .45, { x: -93, y: 2, rotation: 0, ease: Quad.easeOut, delay: .1 });
+	}
+}
+
 email.addEventListener('focus', onEmailFocus);
 email.addEventListener('blur', onEmailBlur);
 email.addEventListener('input', onEmailInput);
-password.addEventListener('focus', onPasswordFocus);
-password.addEventListener('blur', onPasswordBlur);
+password.addEventListener('focus', (e) => {
+	if (!isPasswordVisible) {
+		coverEyes();
+	}
+});
+password.addEventListener('blur', (e) => {
+	if (!isPasswordVisible) {
+		uncoverEyes();
+	}
+});
+passwordToggle.addEventListener('click', togglePassword);
 TweenMax.set(armL, { x: -93, y: 220, rotation: 105, transformOrigin: "top left" });
 TweenMax.set(armR, { x: -93, y: 220, rotation: -105, transformOrigin: "top right" });
+
+// Add initial arm position setup
+window.addEventListener('load', () => {
+	TweenMax.set(armL, { x: -93, y: 220, rotation: 105, transformOrigin: "top left" });
+	TweenMax.set(armR, { x: -93, y: 220, rotation: -105, transformOrigin: "top right" });
+});
